@@ -52,16 +52,31 @@ function M.read_tasks(fallback_paths)
 end
 
 ---@param tasks table
----@return { name: string, command: string }[]
+---@return { name: string, commands: string[] }[]
 function M.normalize(tasks)
   local items = {}
 
-  for name, cmd in pairs(tasks) do
-    table.insert(items, {
-      name = name,
-      text = name,
-      command = cmd,
-    })
+  for name, value in pairs(tasks) do
+    local commands = {}
+
+    if type(value) == "string" then
+      commands = { value }
+
+    elseif type(value) == "table" then
+      for _, cmd in ipairs(value) do
+        if type(cmd) == "string" then
+          table.insert(commands, cmd)
+        end
+      end
+    end
+
+    if #commands > 0 then
+      table.insert(items, {
+        name = name,
+        commands = commands,
+        text = name, -- for snacks matcher
+      })
+    end
   end
 
   table.sort(items, function(a, b)

@@ -1,3 +1,5 @@
+local runner = require("simple_tasks.runner")
+
 local M = {}
 
 function M.pick(items, opts)
@@ -14,10 +16,7 @@ function M.pick(items, opts)
 
 		confirm = function(picker, item)
 			picker:close()
-			vim.notify("Running: " .. item.name)
-			vim.schedule(function()
-				vim.cmd(item.command)
-			end)
+			runner.run(item)
 		end,
 	})
 end
