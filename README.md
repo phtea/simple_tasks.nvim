@@ -29,21 +29,51 @@ Using Neovim’s built-in package manager (0.12+):
 
 ```lua
 vim.pack.add {
-	{ src = "https://github.com/phtea/simple_tasks.nvim" },
+    { src = "https://github.com/phtea/simple_tasks.nvim" },
 }
 
 local st = require("simple_tasks")
 
 -- These are default settings, no need to explicitly set them
 st.setup({
-	picker = "ui", -- ui | snacks
-	title = "Project Tasks",
-	fallback_files = {
-		"~/.tasks.json",
-	},
+    picker = "ui", -- ui | snacks
+    title = "Project Tasks",
+    fallback_files = {
+        "~/.tasks.json",
+    },
 })
 
 vim.keymap.set("n", "<leader>tt", st.pick, { desc = "Project tasks", })
+```
+
+## 📝 `.tasks.json` format
+
+Tasks are defined in a `.tasks.json` file located in your project root  
+(or in a global fallback file if no local one exists).
+
+Each task is a key–value pair where:
+
+- **keys** are task names shown in the picker
+- **values** are either:
+  - a single Ex command (`string`)
+  - a list of Ex commands (`string[]`) executed in order
+
+---
+
+### Example
+
+Use a string value for simple, one-step tasks or array of strings for sequencial execution:
+
+```json
+{
+    "Run tests": "!make test",
+    "Format current file": "lua vim.lsp.buf.format()",
+    "Format neovim config": [
+        "args ~/dotfiles/nvim/.config/nvim/**/*.lua",
+        "argdo lua vim.lsp.buf.format()",
+        "wa"
+    ]
+}
 ```
 
 ## 🤝 Contributing
