@@ -3,7 +3,7 @@ local core = require("simple_tasks.core")
 local M = {}
 
 M.config = {
-  picker = "snacks", -- snacks | ui
+  picker = "ui", -- ui | snacks
   title = "Project Tasks",
 }
 
