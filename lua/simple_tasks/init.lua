@@ -1,6 +1,7 @@
 ---@class SimpleTasksConfig
 ---@field picker string Picker strategy name ("ui" | "snacks")
 ---@field title string Picker window title
+---@field fallback_files string[] Global task files
 
 local core = require("simple_tasks.core")
 
@@ -9,8 +10,11 @@ local M = {}
 ---Plugin configuration
 ---@type SimpleTasksConfig
 M.config = {
-  picker = "ui", -- ui | snacks
-  title = "Project Tasks",
+	picker = "ui", -- ui | snacks
+	title = "Project Tasks",
+	fallback_files = {
+		"~/.tasks.json",
+	},
 }
 
 ---Setup simple_tasks plugin
@@ -23,7 +27,7 @@ M.config = {
 ---```
 ---@param opts SimpleTasksConfig|nil
 function M.setup(opts)
-  M.config = vim.tbl_deep_extend("force", M.config, opts or {})
+	M.config = vim.tbl_deep_extend("force", M.config, opts or {})
 end
 
 ---@class SimpleTaskItem
@@ -37,24 +41,22 @@ end
 ---@param name string
 ---@return SimpleTasksPicker|nil
 local function get_picker(name)
-  local ok, picker = pcall(require, "simple_tasks.pickers." .. name)
-  if ok then
-    return picker
-  end
+	local ok, picker = pcall(require, "simple_tasks.pickers." .. name)
+	if ok then
+		return picker
+	end
 end
 
 ---Open task picker and execute selected task
 function M.pick()
-  local tasks, err = core.read_tasks()
+  local tasks, err = core.read_tasks(M.config.fallback_files)
   if not tasks then
     vim.notify(err, vim.log.levels.WARN)
     return
   end
 
-  ---@type SimpleTaskItem[]
   local items = core.normalize(tasks)
 
-  ---@type SimpleTasksPicker
   local picker = get_picker(M.config.picker)
     or get_picker("ui")
 
