@@ -12,7 +12,8 @@ Just tasks → pick → execute.
 
 ## ✨ Features
 
-- 📁 Project-local tasks via `.tasks.json`
+- 📁 Project-local `.tasks.json`
+- 🌍 Global `.tasks.json` fallback
 - 🧠 Zero required dependencies
 - 🔌 Pluggable picker strategies
   - `vim.ui.select` (default)
@@ -28,11 +29,36 @@ Using Neovim’s built-in package manager (0.12+):
 
 ```lua
 vim.pack.add {
-    src = "https://github.com/phtea/simple_tasks.nvim"
+	{ src = "https://github.com/phtea/simple_tasks.nvim" },
 }
 
 local st = require("simple_tasks")
-st.setup({ picker = "snacks" })
+
+-- These are default settings, no need to explicitly set them
+st.setup({
+	picker = "ui", -- ui | snacks
+	title = "Project Tasks",
+	fallback_files = {
+		"~/.tasks.json",
+	},
+})
 
 vim.keymap.set("n", "<leader>tt", st.pick, { desc = "Project tasks", })
 ```
+
+## 🤝 Contributing
+
+Contributions are very welcome.
+
+If you’d like to:
+- improve documentation
+- clean up or refactor the code
+- add new picker implementations
+- fix bugs or edge cases
+
+feel free to open an issue or a pull request.
+
+This plugin is intentionally small and simple, so changes are easy to review.  
+I’m happy to review PRs and merge them if they fit the project’s direction and keep the codebase clean.
+
+No strict rules — just keep things minimal and well-reasoned 🙂
