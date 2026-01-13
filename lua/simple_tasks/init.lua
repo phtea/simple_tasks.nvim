@@ -12,7 +12,7 @@ function M.setup(opts)
 end
 
 local function get_picker(name)
-  local ok, picker = pcall(require, "nvim_tasks.pickers." .. name)
+  local ok, picker = pcall(require, "simple_tasks.pickers." .. name)
   if ok then
     return picker
   end

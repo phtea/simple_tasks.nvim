@@ -7,14 +7,14 @@ function M.find_tasks_file()
     ".git",
     "Makefile",
     "CMakeLists.txt",
-    ".nvim_tasks.json",
+    ".tasks.json",
   })
 
   if not root then
     return nil
   end
 
-  local path = root .. "/.nvim_tasks.json"
+  local path = root .. "/.tasks.json"
   if uv.fs_stat(path) then
     return path
   end
@@ -25,14 +25,14 @@ end
 function M.read_tasks()
   local path = M.find_tasks_file()
   if not path then
-    return nil, "No .nvim_tasks.json found"
+    return nil, "No .tasks.json found"
   end
 
   local lines = vim.fn.readfile(path)
   local ok, data = pcall(vim.json.decode, table.concat(lines, "\n"))
 
   if not ok or type(data) ~= "table" then
-    return nil, "Invalid .nvim_tasks.json"
+    return nil, "Invalid .tasks.json"
   end
 
   return data
