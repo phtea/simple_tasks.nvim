@@ -59,6 +59,7 @@ function M.normalize(tasks)
   for name, cmd in pairs(tasks) do
     table.insert(items, {
       name = name,
+      text = name,
       command = cmd,
     })
   end
