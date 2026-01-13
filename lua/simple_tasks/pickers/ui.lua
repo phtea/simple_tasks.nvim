@@ -7,13 +7,15 @@ function M.pick(items, opts)
 			return item.name
 		end,
 	}, function(item)
-			if not item then
-				return
-			end
+		if not item then
+			return
+		end
 
-			vim.notify("Running: " .. item.name)
-			vim.cmd("startinsert")
+		vim.notify("Running: " .. item.name)
+		vim.schedule(function()
+			vim.cmd(item.command)
 		end)
+	end)
 end
 
 return M

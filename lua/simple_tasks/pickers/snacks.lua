@@ -15,7 +15,9 @@ function M.pick(items, opts)
 		confirm = function(picker, item)
 			picker:close()
 			vim.notify("Running: " .. item.name)
-			vim.cmd(item.command)
+			vim.schedule(function()
+				vim.cmd(item.command)
+			end)
 		end,
 	})
 end
