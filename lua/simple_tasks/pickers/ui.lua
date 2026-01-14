@@ -1,3 +1,5 @@
+local runner = require("simple_tasks.runner")
+
 local M = {}
 
 function M.pick(items, opts)
@@ -7,15 +9,12 @@ function M.pick(items, opts)
 			return item.name
 		end,
 	}, function(item)
-		if not item then
-			return
-		end
+			if not item then
+				return
+			end
 
-		vim.notify("Running: " .. item.name)
-		vim.schedule(function()
-			vim.cmd(item.command)
+			runner.run(item)
 		end)
-	end)
 end
 
 return M
